@@ -11,6 +11,16 @@ export class AddressesService {
         @InjectRepository(Address)
         private addressRepository: Repository<Address>,
     ) { }
+    create(createAddressDto: CreateAddressDto) {
+
+        const { user_id, ...addressData } = createAddressDto;
+        const address = this.addressRepository.create({
+            ...addressData,
+            user: { id: user_id }
+        });
+        return this.addressRepository.save(address);
+    }
+
 
 
     findAll() {
