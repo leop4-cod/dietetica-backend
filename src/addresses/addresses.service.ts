@@ -12,15 +12,6 @@ export class AddressesService {
         private addressRepository: Repository<Address>,
     ) { }
 
-    create(createAddressDto: CreateAddressDto) {
-        // Map user_id
-        const { user_id, ...addressData } = createAddressDto;
-        const address = this.addressRepository.create({
-            ...addressData,
-            user: { id: user_id }
-        });
-        return this.addressRepository.save(address);
-    }
 
     findAll() {
         return this.addressRepository.find({ relations: ['user'] });
