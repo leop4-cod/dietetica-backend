@@ -16,22 +16,7 @@ export class ProductsService {
         private readonly inventoryService: InventoryService,
     ) { }
 
-    async create(createProductDto: CreateProductDto) {
-        // Explicitly cast to any to access stock if DTO type check is strict but runtime allows it
-        const { categoria_id, supplier_id, stock, ...productData } = createProductDto as any;
 
-        const product = await this.productRepository.save({
-            ...productData,
-            category: { id: categoria_id },
-            supplier: supplier_id ? { id: supplier_id } : null,
-        });
-
-        if (stock !== undefined) {
-            await this.inventoryService.create(product.id, stock);
-        }
-
-        return product;
-    }
 
     findAll(queryDto: QueryDto): Promise<Pagination<Product>> {
         const { page = 1, limit = 10, search } = queryDto;

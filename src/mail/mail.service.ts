@@ -20,14 +20,14 @@ export class MailService {
 
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
-            port: 465,          // SSL DIRECTO
-            secure: true,       // Evita STARTTLS en 587
+            port: 465,         
+            secure: true,       
             auth: {
                 user: mailUser,
                 pass: mailPass,
             },
             tls: {
-                rejectUnauthorized: false, // Evita certificados dañados de Windows
+                rejectUnauthorized: false, 
                 minVersion: 'TLSv1.2',
             },
         });
