@@ -13,7 +13,7 @@ export class AddressesService {
     ) { }
 
     create(createAddressDto: CreateAddressDto) {
-        // Map user_id to user relation object
+        // Map user_id
         const { user_id, ...addressData } = createAddressDto;
         const address = this.addressRepository.create({
             ...addressData,
@@ -31,7 +31,7 @@ export class AddressesService {
             where: { id },
             relations: ['user']
         });
-        if (!address) throw new NotFoundException('Dirección no encontrada');
+        if (!address) throw new NotFoundException('Direccion no encontrada');
         return address;
     }
 
