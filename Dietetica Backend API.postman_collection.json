@@ -1,0 +1,1318 @@
+{
+	"info": {
+		"_postman_id": "359031b2-9bdd-41b2-93aa-9b616029c861",
+		"name": "Dietetica Backend API",
+		"description": "Collection to test Dietetica Backend endpoints (Fixed Auth Script)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44934855",
+		"_collection_link": "https://santiago-7119046.postman.co/workspace/Santiago's-Workspace~25dced05-222c-4624-8d85-78300fd0af37/collection/44934855-359031b2-9bdd-41b2-93aa-9b616029c861?action=share&source=collection_link&creator=44934855"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"// Fix: Check for data.access_token directly",
+									"if (jsonData.data && jsonData.data.access_token) {",
+									"    pm.collectionVariables.set(\"token\", jsonData.data.access_token);",
+									"    console.log(\"Token updated successfully\");",
+									"    // Capture User ID",
+									"    if (jsonData.data.user && jsonData.data.user.id) {",
+									"        pm.collectionVariables.set(\"currentUserId\", jsonData.data.user.id);",
+									"        console.log(\"User ID captured: \" + jsonData.data.user.id);",
+									"    }",
+									"} else if (jsonData.access_token) {",
+									"    pm.collectionVariables.set(\"token\", jsonData.access_token);",
+									"    if (jsonData.user && jsonData.user.id) {",
+									"         pm.collectionVariables.set(\"currentUserId\", jsonData.user.id);",
+									"    }",
+									"} else {",
+									"    console.error(\"Login failed or token missing. Response:\", jsonData);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@dietetica.com\",\n    \"password\": \"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"User para borrar\",\r\n    \"email\": \"userdelete@dietetica.com\",\r\n    \"password\": \"123456\",\r\n    \"telefono\": \"0991234567\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users?page=1&limit=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/96b343c2-1c88-4dc9-a231-3ee6d589fbfc",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"96b343c2-1c88-4dc9-a231-3ee6d589fbfc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"User1_Updated\",\r\n    \"email\": \"user1@dietetica.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/96b343c2-1c88-4dc9-a231-3ee6d589fbfc",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"96b343c2-1c88-4dc9-a231-3ee6d589fbfc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/b812ddf3-22a9-4701-af0e-454fb55c6caf",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"b812ddf3-22a9-4701-af0e-454fb55c6caf"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "Create Category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Suplementos 2 para borrar\",\n    \"descripcion\": \"Todo tipo de suplementos deleted\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/categories",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/categories",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Category by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/categories/2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Category",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Suplementos para borrar Updated\",\n    \"descripcion\": \"Updated description\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/categories/2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Category",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/categories/2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Create Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.data && jsonData.data.id) {",
+									"    pm.collectionVariables.set(\"productId\", jsonData.data.id);",
+									"    console.log(\"Product ID captured: \" + jsonData.data.id);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Paquete de Frutos Secos\",\n    \"descripcion\": \"Rico en proteinas, fibra, vitaminas y minerales para borrar\",\n    \"precio\": 4.00,\n    \"stock\": 50,\n    \"categoria_id\": 1,\n    \"supplier_id\": \"945b879a-6ad5-4a92-9944-0feb92f09dc7\",\n    \"activo\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/5690ed10-cdee-43cd-805f-1f9340f1b556",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"5690ed10-cdee-43cd-805f-1f9340f1b556"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Cereal Integral sabor a chocolate para borrar Updated\",\n    \"descripcion\": \"Rico en vitaminas y minerales para borrar\",\n    \"precio\": 6.00\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products/5690ed10-cdee-43cd-805f-1f9340f1b556",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"5690ed10-cdee-43cd-805f-1f9340f1b556"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/5690ed10-cdee-43cd-805f-1f9340f1b556",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"5690ed10-cdee-43cd-805f-1f9340f1b556"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Inventory",
+			"item": [
+				{
+					"name": "Update Stock",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"stock\": 100\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/inventory/effa3838-8f57-4093-b9c3-2b76b7303b07",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"inventory",
+								"effa3838-8f57-4093-b9c3-2b76b7303b07"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product Stock (by id product)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/inventory/effa3838-8f57-4093-b9c3-2b76b7303b07",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"inventory",
+								"effa3838-8f57-4093-b9c3-2b76b7303b07"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Add to Cart",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"product_id\": \"effa3838-8f57-4093-b9c3-2b76b7303b07\",\n    \"cantidad\": 2\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/cart",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Cart",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/cart",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Item from Cart",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/cart/5b69ceac-0120-45cd-80ae-7869d667ba59",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"cart",
+								"5b69ceac-0120-45cd-80ae-7869d667ba59"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sales",
+			"item": [
+				{
+					"name": "Create Sale",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"48d528f5-35f8-49f6-9870-38b8948f281c\",\n    \"metodo_pago\": \"Efectivo\",\n    \"coupon_code\": \"VERANO2025\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/sales",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sales"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Sales",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/sales",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sales"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Sale by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/sales/ba9a02dd-64ee-4dba-a0e0-46c821c35d88",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sales",
+								"ba9a02dd-64ee-4dba-a0e0-46c821c35d88"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Sale",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"metodo_pago\": \"Transferencia\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/sales/ba9a02dd-64ee-4dba-a0e0-46c821c35d88",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sales",
+								"ba9a02dd-64ee-4dba-a0e0-46c821c35d88"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Sale",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/sales/e364d970-3b15-4129-ab17-45370f8ef5ff",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"sales",
+								"e364d970-3b15-4129-ab17-45370f8ef5ff"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Nutrition Plans",
+			"item": [
+				{
+					"name": "Create Plan",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": \"96b343c2-1c88-4dc9-a231-3ee6d589fbfc\",\n    \"objetivo\": \"Ganar masa muscular\",\n    \"calorias_diarias\": 3000\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/nutrition-plans",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"nutrition-plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Plans",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/nutrition-plans",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"nutrition-plans"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Suppliers",
+			"item": [
+				{
+					"name": "Create Supplier",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Proveedor Principal\",\n    \"contacto\": \"Juan Perez\",\n    \"email\": \"ventas@proveedor.com\",\n    \"telefono\": \"099111222\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/suppliers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"suppliers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Suppliers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/suppliers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"suppliers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Addresses",
+			"item": [
+				{
+					"name": "Create Address",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"96b343c2-1c88-4dc9-a231-3ee6d589fbfc\",\n    \"calle\": \"Av. Principal 123\",\n    \"ciudad\": \"Quito\",\n    \"codigo_postal\": \"170101\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/addresses/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"addresses",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Addresses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/addresses",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"addresses"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cupones descuento",
+			"item": [
+				{
+					"name": "Create Coupon",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"codigo\": \"INVIERNO2025\",\n    \"descuento_porcentaje\": 10,\n    \"fecha_expiracion\": \"2025-12-31\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/coupons",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"coupons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Coupons",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/coupons",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"coupons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate Coupon",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/coupons/validate/VERANO2025",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"coupons",
+								"validate",
+								"VERANO2025"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Cupon",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"activo\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/coupons/6b499d62-6d3c-4675-bfd9-cdc91ac891a5",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"coupons",
+								"6b499d62-6d3c-4675-bfd9-cdc91ac891a5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}} /coupons/22585dbf-0f29-41aa-b87c-623771c6f330",
+							"host": [
+								"{{baseUrl}} "
+							],
+							"path": [
+								"coupons",
+								"22585dbf-0f29-41aa-b87c-623771c6f330"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reviews",
+			"item": [
+				{
+					"name": "Create Review",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": \"96b343c2-1c88-4dc9-a231-3ee6d589fbfc\",\n    \"productId\": \"5b69ceac-0120-45cd-80ae-7869d667ba59\",\n    \"rating\": 3,\n    \"comentario\": \"Excelente producto\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/reviews/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"reviews",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Reviews",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/reviews",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Review by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/reviews/6944b935fe6dba22fe782ae7",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"reviews",
+								"6944b935fe6dba22fe782ae7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Review",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rating\": 4,\n    \"comentario\": \"Updated comment\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/reviews/6944c0c54b10316648f6955b",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"reviews",
+								"6944c0c54b10316648f6955b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Review",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/reviews/6944c0c54b10316648f6955b",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"reviews",
+								"6944c0c54b10316648f6955b"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "View History",
+			"item": [
+				{
+					"name": "Create History",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": \"96b343c2-1c88-4dc9-a231-3ee6d589fbfc\",\n    \"productId\": \"5b69ceac-0120-45cd-80ae-7869d667ba59\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/history",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"history"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/history",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"history"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get History by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/history/6944c1484b10316648f69565",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"history",
+								"6944c1484b10316648f69565"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update History",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productId\": \"effa3838-8f57-4093-b9c3-2b76b7303b07\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/history/6944c1244b10316648f69562",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"history",
+								"6944c1244b10316648f69562"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete History",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/history/6944c1244b10316648f69562",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"history",
+								"6944c1244b10316648f69562"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth Logs",
+			"item": [
+				{
+					"name": "Create Log",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": \"96b343c2-1c88-4dc9-a231-3ee6d589fbfc\",\n    \"accion\": \"LOGIN_SUCCESS\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth-logs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth-logs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Logs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth-logs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth-logs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Log by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth-logs/6944c61337d6e2171a7fc6ce",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth-logs",
+								"6944c61337d6e2171a7fc6ce"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Log",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accion\": \"LOGOUT_SUCCESS\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth-logs/6944c61337d6e2171a7fc6ce",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth-logs",
+								"6944c61337d6e2171a7fc6ce"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Log",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth-logs/6944c61337d6e2171a7fc6ce",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth-logs",
+								"6944c61337d6e2171a7fc6ce"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Mail",
+			"item": [
+				{
+					"name": "Send Gmail",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"to\": \"correo@gmail.com\",\n    \"subject\": \"Prueba Email\",\n    \"message\": \"<h1>Hola!</h1><p>Prueba de correo</p>\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/mail/send",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"mail",
+								"send"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "currentUserId",
+			"value": ""
+		},
+		{
+			"key": "productId",
+			"value": ""
+		}
+	]
+}
