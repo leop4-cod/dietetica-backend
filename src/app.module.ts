@@ -23,30 +23,27 @@ import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env',
-    }),
-    MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGO_URI') || 'mongodb://localhost:27017/dietetica_db',
-      }),
-      inject: [ConfigService],
-    }),
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         host: configService.get<string>('DB_HOST'),
-        port: parseInt(configService.get<string>('DB_PORT') || '5432', 10),
-        username: configService.get<string>('DB_USER'),
-        password: configService.get<string>('DB_PASS'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true,
       }),
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
       inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGO_URI'),
+      }),
     }),
     AuthModule,
     UsersModule,
@@ -68,5 +65,4 @@ import { MailModule } from './mail/mail.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
-
+export class AppModule {}
