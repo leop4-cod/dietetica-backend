@@ -14,4 +14,4 @@ import { ProductsModule } from '../products/products.module';
     providers: [CartService],
     exports: [CartService],
 })
-export class CartModule { }
+export class CartModule {}
