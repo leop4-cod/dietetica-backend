@@ -17,6 +17,11 @@ export class HistoryController {
     return this.historyService.findAll();
   }
 
+  @Get('user/:userId')
+  findByUser(@Param('userId') userId: string) {
+    return this.historyService.findByUser(userId);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.historyService.findOne(id);
@@ -30,5 +35,10 @@ export class HistoryController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.historyService.remove(id);
+  }
+
+  @Delete('user/:userId')
+  clearUserHistory(@Param('userId') userId: string) {
+    return this.historyService.clearUserHistory(userId);
   }
 }
