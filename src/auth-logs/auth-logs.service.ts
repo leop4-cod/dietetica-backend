@@ -6,7 +6,7 @@ import { CreateAuthLogDto } from './dto/create-auth-log.dto';
 
 @Injectable()
 export class AuthLogsService {
-    constructor(@InjectModel(AuthLog.name) private authLogModel: Model<AuthLogDocument>) { }
+    constructor(@InjectModel(AuthLog.name) private authLogModel: Model<AuthLogDocument>) {}
 
     async create(createAuthLogDto: CreateAuthLogDto): Promise<AuthLog> {
         const createdLog = new this.authLogModel(createAuthLogDto);
