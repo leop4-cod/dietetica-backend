@@ -1,16 +1,16 @@
-# 🥗 Dietética Backend API
+# Dietetica Backend API
 
-API RESTful desarrollada con **NestJS** para la gestión de un sistema de ventas de productos dietéticos. Este proyecto utiliza una **Arquitectura Híbrida de Bases de Datos**, combinando la robustez relacional de PostgreSQL con la flexibilidad de MongoDB.
+API RESTful desarrollada con NestJS para la gestion de un sistema de ventas de productos dieteticos. Este proyecto utiliza una Arquitectura hibrida de Bases de Datos, combinando la robustez relacional de PostgreSQL con la flexibilidad de MongoDB
 
 
-## 🚀 Características Principales
+## Caracteristicas Principales
 
-### 🔐 Autenticación y Seguridad
+### Autenticacion y Seguridad
 *   **JWT (JSON Web Tokens)**: Protección de endpoints.
 *   **Roles**: `admin`, `empleado`, `cliente`.
 *   **Logs de Auditoría**: Registro automático de inicios de sesión en **MongoDB** (`auth_logs`).
 
-### � Gestión de Ventas (PostgreSQL + MongoDB)
+### Gestión de Ventas (PostgreSQL + MongoDB)
 *   **Carrito de Compras (MongoDB)**: Persistente y flexible por usuario.
 *   **Flujo de Venta**: 
     1.  Agregar productos al carrito.
@@ -18,17 +18,17 @@ API RESTful desarrollada con **NestJS** para la gestión de un sistema de ventas
 *   **Inventario**: Control estricto de stock antes de confirmar la venta.
 *   **Cupones**: Descuentos aplicables al total de la venta.
 
-### 📦 Catálogo y Feedback
+### Catálogo y Feedback
 *   **Productos y Categorías**: Gestión estructurada en PostgreSQL.
 *   **Reseñas (MongoDB)**: Calificación y comentarios de productos.
 *   **Historial de Vistas (MongoDB)**: Registro de productos visitados por el usuario (`view_history`).
 *   **Nutrición**: Planes nutricionales personalizados.
 
-### 📧 Notificaciones
+###  Notificaciones
 *   **Envío de Correos**: Integración con **Gmail** (vía `Nodemailer`) para notificaciones.
 
 
-## 🛠️ Tecnologías
+## Tecnologías
 
 *   **Framework**: [NestJS](https://nestjs.com/)
 *   **Bases de Datos**:
@@ -38,7 +38,7 @@ API RESTful desarrollada con **NestJS** para la gestión de un sistema de ventas
 
 ---
 
-## 📋 Requisitos Previos
+## Requisitos Previos
 
 1.  **Node.js** (v18 o superior).
 2.  **PostgreSQL** (corriendo en puerto 5432).
@@ -46,7 +46,7 @@ API RESTful desarrollada con **NestJS** para la gestión de un sistema de ventas
 
 ---
 
-## ⚙️ Instalación y Configuración
+## Instalación y Configuración
 
 1.  **Clonar el repositorio** e instalar dependencias:
     npm install
@@ -81,10 +81,10 @@ API RESTful desarrollada con **NestJS** para la gestión de un sistema de ventas
 
 
 
-## 🧪 Pruebas con Postman
+## Pruebas con Postman
 
 En la raíz del proyecto encontrarás el archivo:
-📄 **`Dietetica Backend API.postman_collection.json`**
+**`Dietetica Backend API.postman_collection.json`**
 
 1.  Abre Postman.
 2.  Importa ese archivo.

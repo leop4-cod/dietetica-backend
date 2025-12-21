@@ -56,7 +56,6 @@ export class AuthService {
     }
 
     async register(registerDto: RegisterDto) {
-        // CreateUserDto is compatible with RegisterDto
         const user = await this.usersService.create(registerDto);
         return {
             message: 'Usuario registrado exitosamente',
