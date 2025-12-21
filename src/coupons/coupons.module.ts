@@ -10,4 +10,4 @@ import { Coupon } from './coupon.entity';
     providers: [CouponsService],
     exports: [CouponsService],
 })
-export class CouponsModule { }
+export class CouponsModule {}
