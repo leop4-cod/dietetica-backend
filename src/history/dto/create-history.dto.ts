@@ -1,11 +1,11 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsUUID } from 'class-validator';
 
 export class CreateHistoryDto {
-    @IsString()
+    @IsUUID()
     @IsNotEmpty()
     userId: string;
 
-    @IsString()
+    @IsUUID()
     @IsNotEmpty()
     productId: string;
 }

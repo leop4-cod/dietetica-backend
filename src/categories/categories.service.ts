@@ -12,7 +12,7 @@ export class CategoriesService {
     constructor(
         @InjectRepository(Category)
         private readonly categoryRepository: Repository<Category>,
-    ) { }
+    ) {}
 
     create(createCategoryDto: CreateCategoryDto) {
         const category = this.categoryRepository.create(createCategoryDto);

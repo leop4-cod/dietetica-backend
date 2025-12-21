@@ -12,7 +12,7 @@ export class AuthService {
         private usersService: UsersService,
         private jwtService: JwtService,
         private authLogsService: AuthLogsService,
-    ) { }
+    ) {}
 
     async validateUser(email: string, pass: string): Promise<any> {
         const user = await this.usersService.findByEmail(email);
@@ -38,7 +38,6 @@ export class AuthService {
             role: user.rol,
         };
 
-        // Automatic Logging
         await this.authLogsService.create({
             userId: user.id,
             accion: 'LOGIN_SUCCESS'
@@ -56,7 +55,6 @@ export class AuthService {
     }
 
     async register(registerDto: RegisterDto) {
-        // CreateUserDto is compatible with RegisterDto
         const user = await this.usersService.create(registerDto);
         return {
             message: 'Usuario registrado exitosamente',

@@ -10,7 +10,7 @@ export class Coupon {
     codigo: string;
 
     @Column('decimal', { precision: 5, scale: 2 })
-    descuento_porcentaje: number; // e.g. 10.00 for 10%
+    descuento_porcentaje: number;
 
     @Column({ type: 'date' })
     fecha_expiracion: Date;

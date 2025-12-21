@@ -6,12 +6,12 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 import { SuccessResponseDto } from '../common/dto/response.dto';
-import { QueryDto } from '../common/dto/query.dto';
+import { QueryDto } from '../common/dto/queray.dto';
 
 @Controller('categories')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class CategoriesController {
-    constructor(private readonly categoriesService: CategoriesService) { }
+    constructor(private readonly categoriesService: CategoriesService) {}
 
     @Roles('admin', 'empleado')
     @Post()

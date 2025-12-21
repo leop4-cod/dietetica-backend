@@ -9,4 +9,4 @@ import { Address } from './address.entity';
     controllers: [AddressesController],
     providers: [AddressesService],
 })
-export class AddressesModule { }
+export class AddressesModule {}

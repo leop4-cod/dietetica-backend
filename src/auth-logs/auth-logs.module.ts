@@ -12,4 +12,4 @@ import { AuthLog, AuthLogSchema } from './schemas/auth-log.schema';
   providers: [AuthLogsService],
   exports: [AuthLogsService],
 })
-export class AuthLogsModule { }
+export class AuthLogsModule {}

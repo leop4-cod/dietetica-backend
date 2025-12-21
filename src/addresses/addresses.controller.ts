@@ -5,9 +5,9 @@ import { UpdateAddressDto } from './dto/update-address.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('addresses')
-@UseGuards(JwtAuthGuard) // Any authenticated user can manage addresses (logic could be refined to 'own' addresses)
+@UseGuards(JwtAuthGuard)
 export class AddressesController {
-    constructor(private readonly addressesService: AddressesService) { }
+    constructor(private readonly addressesService: AddressesService) {}
 
     @Post()
     create(@Body() createAddressDto: CreateAddressDto) {

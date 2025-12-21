@@ -9,7 +9,7 @@ import { Roles } from '../auth/roles.decorator';
 @Controller('coupons')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class CouponsController {
-    constructor(private readonly couponsService: CouponsService) { }
+    constructor(private readonly couponsService: CouponsService) {}
 
     @Post()
     @Roles('admin')
