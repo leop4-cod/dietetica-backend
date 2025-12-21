@@ -17,9 +17,7 @@ export class ProductsService {
     ) { }
 
     async create(createProductDto: CreateProductDto) {
-        // Explicitly cast to any to access stock if DTO type check is strict but runtime allows it
         const { categoria_id, supplier_id, stock, ...productData } = createProductDto as any;
-
         const product = await this.productRepository.save({
             ...productData,
             category: { id: categoria_id },

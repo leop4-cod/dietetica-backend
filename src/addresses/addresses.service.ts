@@ -11,9 +11,8 @@ export class AddressesService {
         @InjectRepository(Address)
         private addressRepository: Repository<Address>,
     ) { }
-
     create(createAddressDto: CreateAddressDto) {
-        // Map user_id to user relation object
+
         const { user_id, ...addressData } = createAddressDto;
         const address = this.addressRepository.create({
             ...addressData,
@@ -21,6 +20,8 @@ export class AddressesService {
         });
         return this.addressRepository.save(address);
     }
+
+
 
     findAll() {
         return this.addressRepository.find({ relations: ['user'] });
@@ -31,7 +32,7 @@ export class AddressesService {
             where: { id },
             relations: ['user']
         });
-        if (!address) throw new NotFoundException('Dirección no encontrada');
+        if (!address) throw new NotFoundException('Direccion no encontrada');
         return address;
     }
 

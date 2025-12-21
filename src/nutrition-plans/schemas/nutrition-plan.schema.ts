@@ -9,7 +9,7 @@ export class NutritionPlan {
     userId: string;
 
     @Prop({ required: true })
-    objetivo: string; // 'bajar' | 'subir' | 'mantener'
+    objetivo: string; 
 
     @Prop({ required: true })
     calorias_diarias: number;

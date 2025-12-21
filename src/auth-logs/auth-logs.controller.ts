@@ -11,7 +11,7 @@ import { SuccessResponseDto } from '../common/dto/response.dto';
 export class AuthLogsController {
     constructor(private readonly authLogsService: AuthLogsService) { }
 
-    @Roles('admin') // Only admin can create logs manually or view them? Actually system creates them. But let's expose for completeness.
+    @Roles('admin')
     @Post()
     async create(@Body() createAuthLogDto: CreateAuthLogDto) {
         const log = await this.authLogsService.create(createAuthLogDto);
@@ -34,7 +34,7 @@ export class AuthLogsController {
 
     @Roles('admin')
     @Put(':id')
-    async update(@Param('id') id: string, @Body() updateAuthLogDto: any) { // Using any for simplicity as DTO might not exist
+    async update(@Param('id') id: string, @Body() updateAuthLogDto: any) { 
         const log = await this.authLogsService.update(id, updateAuthLogDto);
         return new SuccessResponseDto('Auth Log updated successfully', log);
     }

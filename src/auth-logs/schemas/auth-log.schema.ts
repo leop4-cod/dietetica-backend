@@ -6,10 +6,10 @@ export type AuthLogDocument = HydratedDocument<AuthLog>;
 @Schema({ collection: 'auth_logs' })
 export class AuthLog {
     @Prop({ required: true })
-    userId: string; // Storing UUID as string
+    userId: string; 
 
     @Prop({ required: true })
-    accion: string; // 'LOGIN' | 'FAILED_LOGIN'
+    accion: string; 
 
     @Prop({ default: Date.now })
     fecha: Date;

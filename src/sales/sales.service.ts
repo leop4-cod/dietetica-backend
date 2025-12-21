@@ -28,7 +28,7 @@ export class SalesService {
     async create(createSaleDto: CreateSaleDto) {
         const { user_id, coupon_code, metodo_pago, estado } = createSaleDto;
 
-        // 1. Get Cart Items
+       
         const cart = await this.cartService.getCart(user_id);
         if (!cart || cart.items.length === 0) {
             throw new BadRequestException('El carrito está vacío');
@@ -39,7 +39,7 @@ export class SalesService {
         await queryRunner.startTransaction();
 
         try {
-            // 2. Validate Coupon
+           
             let coupon: Coupon | null = null;
             if (coupon_code) {
                 coupon = await this.couponsService.findByCode(coupon_code);
@@ -48,9 +48,9 @@ export class SalesService {
             let totalSale = 0;
             const saleDetailsToSave: SaleDetail[] = [];
 
-            // 3. Process Items from Cart
+            
             for (const item of cart.items) {
-                // Strict Stock Check
+                
                 const inventory = await this.inventoryService.findByProduct(item.product_id);
 
                 if (!inventory) {
@@ -62,16 +62,16 @@ export class SalesService {
                     throw new BadRequestException(`Stock insuficiente para el producto ${product.nombre}. Stock actual: ${inventory.stock}`);
                 }
 
-                // Deduct Stock
+                
                 const newStock = inventory.stock - item.cantidad;
                 await queryRunner.manager.update('inventory', { id: inventory.id }, { stock: newStock });
 
-                // Calculate Values
+                
                 const precio_unitario = Number(product.precio);
                 const subtotal = precio_unitario * item.cantidad;
                 totalSale += subtotal;
 
-                // Prepare Detail
+                
                 const detail = this.saleDetailRepository.create({
                     product: { id: item.product_id },
                     cantidad: item.cantidad,
@@ -81,14 +81,14 @@ export class SalesService {
                 saleDetailsToSave.push(detail);
             }
 
-            // 4. Apply Discount
+            
             if (coupon && coupon.activo) {
                 const discountAmount = (totalSale * Number(coupon.descuento_porcentaje)) / 100;
                 totalSale = totalSale - discountAmount;
                 if (totalSale < 0) totalSale = 0;
             }
 
-            // 5. Create Sale Header
+           
             const sale = this.saleRepository.create({
                 user: { id: user_id },
                 total: totalSale,
@@ -99,7 +99,7 @@ export class SalesService {
             });
             const savedSale = await queryRunner.manager.save(sale) as Sale;
 
-            // 6. Save Details
+            
             for (const detail of saleDetailsToSave) {
                 detail.sale = savedSale;
                 await queryRunner.manager.save(detail);
@@ -107,7 +107,7 @@ export class SalesService {
 
             await queryRunner.commitTransaction();
 
-            // 7. Clear Cart
+            
             await this.cartService.clearCart(user_id);
 
             return this.findOne(savedSale.id);
