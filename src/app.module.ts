@@ -6,10 +6,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-// RolesModule is removed from logic but if folder exists keeping it clean is better. 
-// However, I removed the entity so I should remove the module too or just not import it.
-// I will keep it in imports if it exists to avoid breaking others, but user wanted cleanup. 
-// I will assumption remove RolesModule from imports here.
 import { CategoriesModule } from './categories/categories.module';
 import { ProductsModule } from './products/products.module';
 import { SalesModule } from './sales/sales.module';
@@ -73,4 +69,3 @@ import { MailModule } from './mail/mail.module';
   providers: [AppService],
 })
 export class AppModule { }
-
