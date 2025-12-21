@@ -10,10 +10,9 @@ export class AddressesService {
     constructor(
         @InjectRepository(Address)
         private addressRepository: Repository<Address>,
-    ) { }
+    ) {}
 
     create(createAddressDto: CreateAddressDto) {
-        // Map user_id to user relation object
         const { user_id, ...addressData } = createAddressDto;
         const address = this.addressRepository.create({
             ...addressData,
