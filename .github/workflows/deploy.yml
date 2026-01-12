@@ -1,0 +1,56 @@
+name: 🚀 Deploy Dietetica Backend to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📦 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 📂 Copy project to VPS
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: root
+          key: ${{ secrets.VPS_KEY }}
+          source: "."
+          target: "/opt/dietetica-backend"
+
+      - name: 🚀 Deploy on VPS (Node 22 + PM2)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: root
+          key: ${{ secrets.VPS_KEY }}
+          script: |
+            set -e
+
+            cd /opt/dietetica-backend
+
+            # === Load NVM (IMPORTANT) ===
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+            echo "Node version:"
+            node -v
+            echo "NPM version:"
+            npm -v
+
+            # === Environment variables ===
+            printf "%s" "${{ secrets.ENV_FILE }}" > .env
+
+            # === Install & build ===
+            npm install
+            npm run build
+
+            # === Restart PM2 ===
+            pm2 stop dietetica-backend-api || true
+            pm2 delete dietetica-backend-api || true
+            pm2 start dist/main.js --name dietetica-backend-api
+            pm2 save
