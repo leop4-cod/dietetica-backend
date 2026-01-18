@@ -1,0 +1,84 @@
+name: 🚀 Deploy Dietetica Backend to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📦 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 📂 Copy project to VPS
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: root
+          key: ${{ secrets.VPS_KEY }}
+          source: "."
+          target: "/opt/dietetica-backend"
+
+      - name: 🚀 Deploy on VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: root
+          key: ${{ secrets.VPS_KEY }}
+          script: |
+            set -e
+            cd /opt/dietetica-backend
+
+            # === NVM ===
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+            node -v
+            npm -v
+
+            # === ENV ===
+            printf "%s" "${{ secrets.ENV_FILE }}" > .env
+
+            # === CLEAN ===
+            rm -rf node_modules package-lock.json
+
+            echo "Installing base deps..."
+            npm install
+
+            echo "Installing Nest + ORM deps..."
+            npm install \
+              typeorm \
+              @nestjs/typeorm \
+              mongoose \
+              @nestjs/mongoose \
+              @nestjs/config \
+              @nestjs/passport \
+              @nestjs/jwt \
+              passport-jwt \
+              bcrypt \
+              nodemailer \
+              nestjs-typeorm-paginate
+
+            echo "Installing validation & utils..."
+            npm install \
+              class-validator \
+              class-transformer \
+              @nestjs/mapped-types
+
+            echo "Installing dev deps..."
+            npm install -D \
+              @nestjs/cli \
+              @types/bcrypt \
+              @types/passport-jwt
+
+            echo "Building project..."
+            npm run build
+
+            # === PM2 ===
+            pm2 stop dietetica-backend-api || true
+            pm2 delete dietetica-backend-api || true
+            pm2 start dist/main.js --name dietetica-backend-api
+            pm2 save
