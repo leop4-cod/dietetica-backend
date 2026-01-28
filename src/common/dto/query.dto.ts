@@ -1,13 +1,15 @@
 import { IsInt, IsOptional, IsString, Min } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Transform } from 'class-transformer';
 
 export class QueryDto {
-    @Type(() => Number)
+    @Transform(({ value }) => (value === undefined ? undefined : Number(value)))
+    @IsOptional()
     @IsInt()
     @Min(1)
     page: number = 1;
 
-    @Type(() => Number)
+    @Transform(({ value }) => (value === undefined ? undefined : Number(value)))
+    @IsOptional()
     @IsInt()
     @Min(1)
     limit: number = 10;
