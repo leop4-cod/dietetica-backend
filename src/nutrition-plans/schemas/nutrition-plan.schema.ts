@@ -14,6 +14,9 @@ export class NutritionPlan {
     @Prop({ required: true })
     calorias_diarias: number;
 
+    @Prop()
+    imageUrl?: string;
+
     @Prop({ type: [String], default: [] })
     recomendaciones: string[];
 }

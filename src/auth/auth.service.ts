@@ -56,7 +56,9 @@ export class AuthService {
     }
 
     async register(registerDto: RegisterDto) {
+        // UsersService ya hace el hash
         const user = await this.usersService.create(registerDto);
+
         return {
             message: 'Usuario registrado exitosamente',
             user: {
@@ -69,19 +71,16 @@ export class AuthService {
     }
 
     async createAdmin(dto: CreateAdminDto) {
-        // Evita duplicados por email
         const exists = await this.usersService.findByEmail(dto.email);
         if (exists) throw new BadRequestException('Ya existe un usuario con ese email');
 
-        // Hashear password
-        const hashed = await bcrypt.hash(dto.password, 10);
 
-        // OJO: tu backend usa campos "nombre" y "rol" (no name/role)
         const user = await this.usersService.create({
             nombre: dto.name,
             email: dto.email,
-            password: hashed,
-            rol: 'ADMIN',
+            password: dto.password, // UsersService hace el hash
+            rol: 'admin',
+            codigo_secreto: process.env.ADMIN_SECRET || 'DIETETICA_SECRET_2025',
         } as any);
 
         return {

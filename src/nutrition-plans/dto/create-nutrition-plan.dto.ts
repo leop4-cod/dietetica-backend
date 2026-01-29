@@ -14,6 +14,10 @@ export class CreateNutritionPlanDto {
     calorias_diarias: number;
 
     @IsOptional()
+    @IsString()
+    imageUrl?: string;
+
+    @IsOptional()
     @IsArray()
     @IsString({ each: true })
     recomendaciones: string[];

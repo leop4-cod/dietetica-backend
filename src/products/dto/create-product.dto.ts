@@ -13,6 +13,10 @@ export class CreateProductDto {
     @Min(0)
     precio: number;
 
+    @IsString()
+    @IsOptional()
+    image_url?: string;
+
     @IsInt()
     @Min(0)
     stock: number;

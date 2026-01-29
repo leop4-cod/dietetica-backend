@@ -17,6 +17,9 @@ export class Product {
     @Column('decimal', { precision: 10, scale: 2 })
     precio: number;
 
+    @Column({ type: 'text', nullable: true })
+    image_url?: string;
+
     @ManyToOne(() => Category)
     @JoinColumn({ name: 'categoria_id' })
     category: Category;
