@@ -79,6 +79,17 @@ API RESTful desarrollada con NestJS para la gestion de un sistema de ventas de p
 
     El servidor iniciará en: `http://localhost:3000`
 
+## Seed de datos (consulta dietetica)
+Para insertar datos iniciales reales (categorias, productos con imagen, planes, reseñas y usuarios de prueba):
+
+```bash
+npm run seed
+```
+
+Credenciales de prueba:
+- Admin: `admin@nutrivida.local` / `admin123`
+- Cliente: `cliente@nutrivida.local` / `cliente123`
+
 
 
 ## Pruebas con Postman

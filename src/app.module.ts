@@ -20,6 +20,7 @@ import { CouponsModule } from './coupons/coupons.module';
 import { CartModule } from './cart/cart.module';
 import { HistoryModule } from './history/history.module';
 import { MailModule } from './mail/mail.module';
+import { PlanReservationsModule } from './plan-reservations/plan-reservations.module';
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { MailModule } from './mail/mail.module';
     CartModule,
     HistoryModule,
     MailModule,
+    PlanReservationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

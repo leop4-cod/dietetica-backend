@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { NutritionPlansService } from './nutrition-plans.service';
 import { CreateNutritionPlanDto } from './dto/create-nutrition-plan.dto';
 import { UpdateNutritionPlanDto } from './dto/update-nutrition-plan.dto';
@@ -8,11 +8,11 @@ import { Roles } from '../auth/roles.decorator';
 import { SuccessResponseDto } from '../common/dto/response.dto';
 
 @Controller('nutrition-plans')
-@UseGuards(JwtAuthGuard, RolesGuard)
 export class NutritionPlansController {
     constructor(private readonly nutritionPlansService: NutritionPlansService) { }
 
     @Roles('admin', 'empleado')
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Post()
     async create(@Body() createNutritionPlanDto: CreateNutritionPlanDto) {
         const plan = await this.nutritionPlansService.create(createNutritionPlanDto);
@@ -32,6 +32,7 @@ export class NutritionPlansController {
     }
 
     @Roles('admin', 'empleado')
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Patch(':id')
     async update(@Param('id') id: string, @Body() updateNutritionPlanDto: UpdateNutritionPlanDto) {
         const plan = await this.nutritionPlansService.update(id, updateNutritionPlanDto);
@@ -39,6 +40,7 @@ export class NutritionPlansController {
     }
 
     @Roles('admin')
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Delete(':id')
     async remove(@Param('id') id: string) {
         await this.nutritionPlansService.remove(id);

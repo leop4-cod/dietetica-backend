@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Query } from '@nestjs/common';
 import { HistoryService } from './history.service';
 import { CreateHistoryDto } from './dto/create-history.dto';
 import { UpdateHistoryDto } from './dto/update-history.dto';
+import { CreateAppointmentDto } from './dto/create-appointment.dto';
 
 @Controller('history')
 export class HistoryController {
@@ -12,9 +13,19 @@ export class HistoryController {
     return this.historyService.create(createHistoryDto);
   }
 
+  @Post('appointments')
+  createAppointment(@Body() dto: CreateAppointmentDto) {
+    return this.historyService.createAppointment(dto);
+  }
+
   @Get()
   findAll() {
     return this.historyService.findAll();
+  }
+
+  @Get('appointments')
+  findAppointments(@Query('userId') userId?: string) {
+    return this.historyService.findAppointments(userId);
   }
 
   @Get(':id')

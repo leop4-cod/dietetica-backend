@@ -4,12 +4,20 @@ import { Model } from 'mongoose';
 import { Review, ReviewDocument } from './schemas/review.schema';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class ReviewsService {
-    constructor(@InjectModel(Review.name) private reviewModel: Model<ReviewDocument>) { }
+    constructor(
+        @InjectModel(Review.name) private reviewModel: Model<ReviewDocument>,
+        private readonly usersService: UsersService,
+    ) { }
 
     async create(createReviewDto: CreateReviewDto): Promise<Review> {
+        const user = await this.usersService.findOne(createReviewDto.userId);
+        if (!user) {
+            throw new NotFoundException(`User with ID ${createReviewDto.userId} not found`);
+        }
         const createdReview = new this.reviewModel(createReviewDto);
         return createdReview.save();
     }

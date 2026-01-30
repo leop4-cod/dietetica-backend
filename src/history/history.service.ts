@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { HistoryLog, HistoryLogDocument } from './schemas/history.schema';
 import { CreateHistoryDto } from './dto/create-history.dto';
 import { UpdateHistoryDto } from './dto/update-history.dto';
+import { CreateAppointmentDto } from './dto/create-appointment.dto';
 
 @Injectable()
 export class HistoryService {
@@ -14,8 +15,26 @@ export class HistoryService {
     return createdLog.save();
   }
 
+  async createAppointment(dto: CreateAppointmentDto): Promise<HistoryLog> {
+    const created = new this.historyModel({
+      userId: dto.userId,
+      tipo: 'appointment',
+      cita_fecha: new Date(dto.cita_fecha),
+      motivo: dto.motivo,
+      estado: dto.estado ?? 'pendiente',
+      especialista: dto.especialista,
+    });
+    return created.save();
+  }
+
   async findAll(): Promise<HistoryLog[]> {
     return this.historyModel.find().exec();
+  }
+
+  async findAppointments(userId?: string): Promise<HistoryLog[]> {
+    const query: any = { tipo: 'appointment' };
+    if (userId) query.userId = userId;
+    return this.historyModel.find(query).exec();
   }
 
   async findOne(id: string): Promise<HistoryLog> {

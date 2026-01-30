@@ -8,8 +8,23 @@ export class HistoryLog {
     @Prop({ required: true })
     userId: string;
 
-    @Prop({ required: true })
-    productId: string;
+    @Prop()
+    productId?: string;
+
+    @Prop({ default: 'view' })
+    tipo?: string;
+
+    @Prop()
+    cita_fecha?: Date;
+
+    @Prop()
+    motivo?: string;
+
+    @Prop({ default: 'pendiente' })
+    estado?: string;
+
+    @Prop()
+    especialista?: string;
 
     @Prop({ default: Date.now })
     date: Date;

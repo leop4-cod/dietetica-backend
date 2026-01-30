@@ -84,11 +84,15 @@ export class CartService {
     }
 
     async removeFromCart(userId: string, productId: string) {
-        return this.cartModel.findOneAndUpdate(
+        const updatedCart = await this.cartModel.findOneAndUpdate(
             { user_id: userId },
             { $pull: { items: { product_id: productId } } },
             { new: true }
         );
+        if (!updatedCart) {
+            throw new NotFoundException('Cart not found');
+        }
+        return updatedCart;
     }
 
     async clearCart(userId: string) {
