@@ -6,21 +6,46 @@ import * as bcrypt from 'bcrypt';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // CORS
+  // ============================
+  // ✅ CORS CONFIG
+  // ============================
+
   const envOrigins = process.env.CORS_ORIGINS
-    ? process.env.CORS_ORIGINS.split(',').map((origin) => origin.trim()).filter(Boolean)
+    ? process.env.CORS_ORIGINS
+        .split(',')
+        .map((o) => o.trim())
+        .filter(Boolean)
     : [];
+
+  const extraAllowed = [
+    'https://nutrivida.desarrollo-software.xyz',
+    'https://www.nutrivida.desarrollo-software.xyz',
+  ];
+
   app.enableCors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
+
+      // ENV
       if (envOrigins.includes(origin)) return callback(null, true);
-      if (/^http:\/\/localhost:517\d$/.test(origin)) return callback(null, true);
+
+      // Producción
+      if (extraAllowed.includes(origin)) return callback(null, true);
+
+      // Local dev
+      if (/^http:\/\/localhost:\d+$/.test(origin)) return callback(null, true);
+
       return callback(new Error('Not allowed by CORS'));
     },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
-  // Crear admin automático
+  // ============================
+  // ✅ AUTO ADMIN
+  // ============================
+
   const dataSource = app.get(DataSource);
   const userRepo = dataSource.getRepository('User');
 
@@ -42,12 +67,20 @@ async function bootstrap() {
       rol: 'admin',
     });
 
-    console.log(' Admin creado:', adminEmail);
+    console.log('✅ Admin creado:', adminEmail);
   } else {
-    console.log(' Admin ya existe');
+    console.log('ℹ️ Admin ya existe');
   }
 
-  await app.listen(process.env.PORT ?? 3000);
+  // ============================
+  // ✅ START SERVER
+  // ============================
+
+  const port = process.env.PORT ?? 3000;
+
+  await app.listen(port, '0.0.0.0');
+
+  console.log(`🚀 API running on port ${port}`);
 }
 
 bootstrap();
